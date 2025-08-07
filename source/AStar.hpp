@@ -25,6 +25,7 @@ namespace AStar
     using uint = unsigned int;
     using HeuristicFunction = std::function<uint(Vec2i, Vec2i)>;
     using CoordinateList = std::vector<Vec2i>;
+    using ObjectShape = std::vector<std::vector<bool>>;
 
     struct Node
     {
@@ -40,7 +41,7 @@ namespace AStar
 
     class Generator
     {
-        bool detectCollision(Vec2i coordinates_);
+        bool detectCollision(Vec2i coordinates_, const ObjectShape& shape_ = {{true}});
         Node* findNodeOnList(NodeSet& nodes_, Vec2i coordinates_);
         void releaseNodes(NodeSet& nodes_);
 
@@ -49,7 +50,7 @@ namespace AStar
         void setWorldSize(Vec2i worldSize_);
         void setDiagonalMovement(bool enable_);
         void setHeuristic(HeuristicFunction heuristic_);
-        CoordinateList findPath(Vec2i source_, Vec2i target_);
+        CoordinateList findPath(Vec2i source_, Vec2i target_, const ObjectShape& objectShape_ = {{true}});
         void addCollision(Vec2i coordinates_);
         void removeCollision(Vec2i coordinates_);
         void clearCollisions();

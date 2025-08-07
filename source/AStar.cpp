@@ -64,7 +64,7 @@ void AStar::Generator::clearCollisions()
     walls.clear();
 }
 
-AStar::CoordinateList AStar::Generator::findPath(Vec2i source_, Vec2i target_)
+AStar::CoordinateList AStar::Generator::findPath(Vec2i source_, Vec2i target_, const ObjectShape& objectShape_)
 {
     Node *current = nullptr;
     NodeSet openSet, closedSet;
@@ -93,7 +93,7 @@ AStar::CoordinateList AStar::Generator::findPath(Vec2i source_, Vec2i target_)
 
         for (uint i = 0; i < directions; ++i) {
             Vec2i newCoordinates(current->coordinates + direction[i]);
-            if (detectCollision(newCoordinates) ||
+            if (detectCollision(newCoordinates, objectShape_) ||
                 findNodeOnList(closedSet, newCoordinates)) {
                 continue;
             }
@@ -144,12 +144,19 @@ void AStar::Generator::releaseNodes(NodeSet& nodes_)
     }
 }
 
-bool AStar::Generator::detectCollision(Vec2i coordinates_)
+bool AStar::Generator::detectCollision(Vec2i coordinates_, const ObjectShape& shape_)
 {
-    if (coordinates_.x < 0 || coordinates_.x >= worldSize.x ||
-        coordinates_.y < 0 || coordinates_.y >= worldSize.y ||
-        std::find(walls.begin(), walls.end(), coordinates_) != walls.end()) {
-        return true;
+    for (int row = 0; row < static_cast<int>(shape_.size()); ++row) {
+        for (int col = 0; col < static_cast<int>(shape_[row].size()); ++col) {
+            if (shape_[row][col]) { // This part of the object is solid
+                Vec2i checkPos = coordinates_ + Vec2i{col, row};
+                if (checkPos.x < 0 || checkPos.x >= worldSize.x ||
+                    checkPos.y < 0 || checkPos.y >= worldSize.y ||
+                    std::find(walls.begin(), walls.end(), checkPos) != walls.end()) {
+                    return true;
+                }
+            }
+        }
     }
     return false;
 }

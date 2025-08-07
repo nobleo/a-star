@@ -14,4 +14,12 @@ int main()
     for(auto& coordinate : path) {
         std::cout << coordinate.x << " " << coordinate.y << "\n";
     }
+
+    // Demonstrate pathfinding for a custom shape: {true, false, true}
+    std::cout << "\nGenerate path for shape {true, false, true} ...\n";
+    AStar::ObjectShape customShape = {{true, false, true}};
+    auto customPath = generator.findPath({0, 0}, {20, 20}, customShape);
+    for(auto& coordinate : customPath) {
+        std::cout << coordinate.x << " " << coordinate.y << "\n";
+    }
 }
