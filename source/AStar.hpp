@@ -41,12 +41,12 @@ namespace AStar
 
     class Generator
     {
-        bool detectCollision(Vec2i coordinates_, const ObjectShape& shape_ = {{true}});
         Node* findNodeOnList(NodeSet& nodes_, Vec2i coordinates_);
         void releaseNodes(NodeSet& nodes_);
 
     public:
         Generator();
+        bool detectCollision(Vec2i coordinates_, const ObjectShape& shape_ = {{true}});
         void setWorldSize(Vec2i worldSize_);
         void setDiagonalMovement(bool enable_);
         void setHeuristic(HeuristicFunction heuristic_);
