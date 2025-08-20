@@ -70,6 +70,16 @@ AStar::CoordinateList AStar::Generator::findPath(Vec2i source_, Vec2i target_, c
     NodeSet openSet, closedSet;
     openSet.reserve(100);
     closedSet.reserve(100);
+    
+    // Validate start and goal positions
+    if (detectCollision(source_, objectShape_)) {
+        return CoordinateList();
+    }
+    
+    if (detectCollision(target_, objectShape_)) {
+        return CoordinateList();
+    }
+    
     openSet.push_back(new Node(source_));
 
     while (!openSet.empty()) {
